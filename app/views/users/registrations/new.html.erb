@@ -1,0 +1,60 @@
+<div class="container center-block">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <div class="page-header">
+        <h3>ユーザ新規登録</h3>
+      </div>
+    </div>
+  </div>
+  <br />
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="field">
+          <%= render "users/shared/error_messages", resource: resource %>
+          <%= f.label :ユーザーネーム %><br />
+          <%= f.text_field :name , class: "form-control"%>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="field">
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="field">
+          <%= f.label :password %>
+          <% if @minimum_password_length %>
+            <em>(<%= @minimum_password_length %> 文字以上)</em>
+          <% end %><br />
+          <%= f.password_field :password, autocomplete: "new-password", class: "form-control" %>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="field">
+          <%= f.label :password_confirmation %><br />
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "form-control" %>
+        </div>
+      </div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+        <div class="actions">
+          <%= f.submit "新規登録", class:"btn btn-primary btn-block" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

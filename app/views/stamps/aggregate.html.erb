@@ -1,0 +1,115 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="page-header">
+        <h1>打刻集計</h1>
+      </div>
+    </div>
+  </div>
+  <form class="form-inline">
+    <label class="sr-only" for="inlineFormInputName2">Name</label>
+    <input type="text" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="Jane Doe">
+    <label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
+    <div class="input-group mb-2 mr-sm-2">
+      <div class="input-group-prepend">
+        <div class="input-group-text">@</div>
+      </div>
+      <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Username">
+    </div>
+    <div class="form-check mb-2 mr-sm-2">
+      <input class="form-check-input" type="checkbox" id="inlineFormCheck">
+      <label class="form-check-label" for="inlineFormCheck">
+        Remember me
+      </label>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Submit</button>
+  </form>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <%=link_to  "csv出力（全期間、全ユーザ）",stamp_csv_export_path(format: :csv) %>
+    </div>
+  </div>
+  <br>
+  <%=form_with url:"/stamp/day_search" ,method: :get do |form| %>
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="date">日付</label>
+        <input class="form-control" type="date" name="date" id="date" value="<%=@date%>">
+      </div>
+      <button type="submit" class="btn btn-primary">検索</button>
+    </form>
+  <%end%>
+  <br>
+  <%=form_with url:"/stamp/name_search" ,method: :get do |form| %>
+    <form class="form-inline">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+            <input class="form-control" type="text" name="name" value="" placeholder="おなまえ(必須)">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <input class="form-control" type="date" name="date_from" value="">
+            <span class="input-group-addon">to</span>
+            <input class="form-control" type="date" name="date_to" value="">
+          </div>
+          <div class="col-xs-2">
+            <button type="submit" class="btn btn-primary">検索</button>
+          </div>
+          <div class="col-xs-2">
+            <button type="btn" class="btn btn-secondry">リセット</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  <%end%>
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>名前</th>
+            <th>始業時刻</th>
+            <th>休憩開始時刻</th>
+            <th>業務再開時刻</th>
+            <th>終業時刻</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stamps.each do |stamp|%>
+            <tr>
+              <td><%=stamp.name%></td>
+              <% if stamp.start == nil %>
+                <td>未</td>
+              <%else%>
+                <td><%=stamp.start.strftime("%H:%M")%></td>
+              <%end%>
+              <% if stamp.am_finish == nil %>
+                <td>未</td>
+              <%else%>
+                <td><%=stamp.am_finish.strftime("%H:%M")%></td>
+              <%end%>
+              <% if stamp.pm_start == nil %>
+                <td>未</td>
+              <%else%>
+                <td><%=stamp.pm_start.strftime("%H:%M")%></td>
+              <%end%>
+              <% if stamp.finish == nil %>
+                <td>未</td>
+              <%else%>
+                <td><%=stamp.finish.strftime("%H:%M")%></td>
+              <%end%>
+            </tr>
+          <%end%>
+          <tr>
+            <td>合計：<%=@stamps.count %>人</td>
+            <td>合計：<%=@stamps.where.not(start:nil).count %>　人</td>
+            <td>合計：<%=@stamps.where.not(am_finish:nil).count %>　人</td>
+            <td>合計：<%=@stamps.where.not(pm_start:nil).count %>　人</td>
+            <td>合計：<%=@stamps.where.not(finish:nil).count %>　人</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <p>登録ありがとうございます。 <%= @email %>　さん</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="page-header">
+        <h3>アカウント登録のための認証</h3>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <p>下記リンクをクリックいただき、登録したメールアドレスとパスワードを入力後</p>
+      <p>ご利用可能となります。</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <p><%= link_to 'アカウント認証はこちら', confirmation_url(@resource, confirmation_token: @token) %></p>
+    </div>
+  </div>
+</div>

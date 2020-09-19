@@ -1,0 +1,113 @@
+<div class="container index">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="page-header">
+        <h3>本日の打刻です</h3>
+        <%=@datetime.year %>年<%=@datetime.month %>月<%=@datetime.day %>日
+        <%=@datetime.hour %>時<%=@datetime.min %>分<br>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-3">
+      <%= form_with url:"/stamp/create_start" do |form| %>
+        <button type="submit" class="btn btn-primary btn-block">始業</button>
+      <%end%>
+    </div>
+    <div class="col-xs-12 col-sm-3">
+      <%= form_with url:"/stamp/create_am_finish" do |form| %>
+        <button type="submit" class="btn btn-primary btn-block">昼休憩</button>
+      <%end%>
+    </div>
+    <div class="col-xs-12 col-sm-3">
+      <%= form_with url:"/stamp/create_pm_start" do |form| %>
+        <button type="submit" class="btn btn-primary btn-block">休憩後再開</button>
+      <%end%>
+    </div>
+    <div class="col-xs-12 col-sm-3">
+      <%= form_with url:"/stamp/create_finish" do |form| %>
+        <button type="submit" class="btn btn-primary btn-block">終業</button>
+      <%end%>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <%= form_with url:"/stamp/create_memo" do |form| %>
+      <div class="col-xs-6">
+        <div class="form-group">
+          <textarea name="memo" class="form-control" placeholder="メモ：面談により19時まで残業　など"></textarea>
+        </div>
+      </div>
+      <div class="col-xs-3">
+        <button type="submit" class="btn btn-primary btn-block">メモ登録</button>
+      </div>
+    <%end%>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-xs-12">
+      <p><%=@current_user.name%>　さん あなたの登録状況</p>
+    </div>
+  </div>
+  <div class="row">
+    <%= form_with url:"/stamp/my_search" do |form| %>
+      <div class="col-xs-3 col-sm-2 col-lg-1">
+        <%=select_tag "month", options_for_select([["1月", "01"],["2月","02"],["3月","03"],["4月","04"],["5月", "05"],["6月","06"],["7月","07"],["8月","08"],["9月", "09"],["10月","10"],["11月","11"],["12月","12"]], :selected=> @month) ,class: "btn btn-default dropdown-toggle" %>
+      </div>
+      <div class="col-xs-3 col-sm-2 col-lg-1">
+        <button type="submit" class="btn btn-primary btn-block">表示</button>
+      </div>
+    <% end %>
+  </div>
+  <br>
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr class="success">
+            <th>月日</th>
+            <th>始業時刻</th>
+            <th>休憩開始時刻</th>
+            <th>業務再開時刻</th>
+            <th>終業時刻</th>
+            <th>メモ</th>
+            <th>編集</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @stamps.each do |stamp|%>
+            <tr>
+              <td><%=stamp.date.year%>年<%=stamp.date.month%>月<%=stamp.date.day%>日</td>
+              <% if stamp.start == nil %>
+                <td><%=link_to("未","/stamp/#{stamp.id}/start")%></td>
+              <%else%>
+                <td><%=link_to(stamp.start.strftime("%H:%M"),"/stamp/#{stamp.id}/start") %></td>
+              <%end%>
+              <% if stamp.am_finish == nil %>
+                <td><%=link_to("未","/stamp/#{stamp.id}/am_finish")%></td>
+              <%else%>
+                <td><%=link_to(stamp.am_finish.strftime("%H:%M"),"/stamp/#{stamp.id}/am_finish")%></td>
+              <%end%>
+              <% if stamp.pm_start == nil %>
+                <td><%=link_to("未","/stamp/#{stamp.id}/pm_start")%></td>
+              <%else%>
+                <td><%=link_to(stamp.pm_start.strftime("%H:%M"),"/stamp/#{stamp.id}/pm_start")%></td>
+              <%end%>
+              <% if stamp.finish == nil %>
+                <td><%=link_to("未","/stamp/#{stamp.id}/finish")%></td>
+              <%else%>
+                <td><%=link_to(stamp.finish.strftime("%H:%M"),"/stamp/#{stamp.id}/finish")%></td>
+              <%end%>
+              <% if stamp.memo == nil %>
+                <td></td>
+              <%else%>
+                <td><%=stamp.memo %></td>
+              <%end%>
+              <td><%=link_to("削除","/stamp/#{stamp.id}/destroy",{method: :post})%></td>
+            </tr>
+          <%end%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

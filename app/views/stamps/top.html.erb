@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="page-header">
+        <h1>待機PJ用　打刻システム</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <% if current_user.try(:admin?) %>
+        <h2>あなたは管理者モードでログイン中です</h2>
+        <p>ユーザ情報編集、打刻集計、打刻時間修正が可能です</p>
+      <% elsif current_user %>
+        <h2>現在ログイン中です！</h2>
+        <p><%=link_to("打刻する！","/stamp/index")%></p>
+      <% else %>
+        <h2>ログインしてご利用ください！</h2>
+      <% end %>
+    </div>
+  </div>
+</div>
