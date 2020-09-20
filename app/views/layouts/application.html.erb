@@ -9,6 +9,16 @@
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-static-top">
+      <% if flash[:notice] %>
+        <div class="flash_notice">
+          <%= flash[:notice] %>
+        </div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="flash_alert">
+          <%= flash[:alert] %>
+        </div>
+      <% end %>
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar1">

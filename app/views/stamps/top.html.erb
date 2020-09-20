@@ -9,14 +9,17 @@
   <div class="row">
     <div class="col-xs-12 col-sm-6">
       <% if current_user.try(:admin?) %>
-        <h2>あなたは管理者モードでログイン中です</h2>
-        <p>ユーザ情報編集、打刻集計、打刻時間修正が可能です</p>
-      <% elsif current_user %>
-        <h2>現在ログイン中です！</h2>
-        <p><%=link_to("打刻する！","/stamp/index")%></p>
-      <% else %>
-        <h2>ログインしてご利用ください！</h2>
-      <% end %>
+        <h2>管理者モードでログイン中</h2>
+        <p><strong>ユーザ情報編集、打刻集計、打刻時間修正が可能です<strong></p>
+            <p><%=link_to("ユーザ情報編集はこちら","/stamp/index")%></p>
+            <p><%=link_to("打刻集計はこちら","/stamp/aggregate")%></p>
+          <% elsif current_user %>
+            <h2>現在ログイン中</h2>
+            <p><%=link_to("打刻する！","/stamp/index")%></p>
+          <% else %>
+            <h2>ようこそ！</h2>
+            <h3>ログインしてご利用ください！</h3>
+          <% end %>
+        </div>
+      </div>
     </div>
-  </div>
-</div>

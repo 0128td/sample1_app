@@ -13,7 +13,24 @@
 //= require rails-ujs
 //= require activestorage
 //= require turbolinks
-//= require bootstrap-sprockets
 //= require_tree .
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap-sprockets
+
+$(document).on('turbolinks:load', function() {
+    $("#reset").click(function() {
+        $("#search_name").val("");
+        $("#search_from").val("");
+        $("#search_to").val("");
+
+    });
+
+    $(function() {
+        setTimeout("$('.flash_notice').fadeOut('slow')", 1500);
+    });
+    $(function() {
+        setTimeout("$('.flash_alert').fadeOut('slow')", 1500);
+    });
+
+});

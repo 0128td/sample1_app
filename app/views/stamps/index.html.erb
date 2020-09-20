@@ -2,9 +2,8 @@
   <div class="row">
     <div class="col-xs-6">
       <div class="page-header">
-        <h3>本日の打刻です</h3>
-        <%=@datetime.year %>年<%=@datetime.month %>月<%=@datetime.day %>日
-        <%=@datetime.hour %>時<%=@datetime.min %>分<br>
+        <h3>本日の打刻をしてください</h3>
+        <p>現在の日時：<%=@datetime.year %>年<%=@datetime.month %>月<%=@datetime.day %>日<%=@datetime.hour %>時<%=@datetime.min %>分</p>
       </div>
     </div>
   </div>
@@ -35,27 +34,27 @@
     <%= form_with url:"/stamp/create_memo" do |form| %>
       <div class="col-xs-6">
         <div class="form-group">
-          <textarea name="memo" class="form-control" placeholder="メモ：面談により19時まで残業　など"></textarea>
+          <textarea name="memo" class="form-control" placeholder="メモ：面談により19時まで残業　など"><%=@stamp.memo%></textarea>
         </div>
       </div>
       <div class="col-xs-3">
-        <button type="submit" class="btn btn-primary btn-block">メモ登録</button>
+        <button type="submit" class="btn btn-primary btn-sm">メモ登録</button>
       </div>
     <%end%>
   </div>
   <br>
   <div class="row">
     <div class="col-xs-12">
-      <p><%=@current_user.name%>　さん あなたの登録状況</p>
+      <p>あなたの登録状況</p>
     </div>
   </div>
   <div class="row">
-    <%= form_with url:"/stamp/my_search" do |form| %>
+    <%= form_with url:"/stamp/my_search", local: true do |form| %>
       <div class="col-xs-3 col-sm-2 col-lg-1">
         <%=select_tag "month", options_for_select([["1月", "01"],["2月","02"],["3月","03"],["4月","04"],["5月", "05"],["6月","06"],["7月","07"],["8月","08"],["9月", "09"],["10月","10"],["11月","11"],["12月","12"]], :selected=> @month) ,class: "btn btn-default dropdown-toggle" %>
       </div>
       <div class="col-xs-3 col-sm-2 col-lg-1">
-        <button type="submit" class="btn btn-primary btn-block">表示</button>
+        <button type="submit" class="btn btn-primary btn-sm">表示</button>
       </div>
     <% end %>
   </div>
@@ -71,7 +70,6 @@
             <th>業務再開時刻</th>
             <th>終業時刻</th>
             <th>メモ</th>
-            <th>編集</th>
           </tr>
         </thead>
         <tbody>
@@ -79,31 +77,30 @@
             <tr>
               <td><%=stamp.date.year%>年<%=stamp.date.month%>月<%=stamp.date.day%>日</td>
               <% if stamp.start == nil %>
-                <td><%=link_to("未","/stamp/#{stamp.id}/start")%></td>
+                <td>未</td>
               <%else%>
-                <td><%=link_to(stamp.start.strftime("%H:%M"),"/stamp/#{stamp.id}/start") %></td>
+                <td><%=stamp.start.strftime("%H:%M") %></td>
               <%end%>
               <% if stamp.am_finish == nil %>
-                <td><%=link_to("未","/stamp/#{stamp.id}/am_finish")%></td>
+                <td>未</td>
               <%else%>
-                <td><%=link_to(stamp.am_finish.strftime("%H:%M"),"/stamp/#{stamp.id}/am_finish")%></td>
+                <td><%=stamp.am_finish.strftime("%H:%M") %></td>
               <%end%>
               <% if stamp.pm_start == nil %>
-                <td><%=link_to("未","/stamp/#{stamp.id}/pm_start")%></td>
+                <td>未</td>
               <%else%>
-                <td><%=link_to(stamp.pm_start.strftime("%H:%M"),"/stamp/#{stamp.id}/pm_start")%></td>
+                <td><%=stamp.pm_start.strftime("%H:%M") %></td>
               <%end%>
               <% if stamp.finish == nil %>
-                <td><%=link_to("未","/stamp/#{stamp.id}/finish")%></td>
+                <td>未</td>
               <%else%>
-                <td><%=link_to(stamp.finish.strftime("%H:%M"),"/stamp/#{stamp.id}/finish")%></td>
+                <td><%=stamp.finish.strftime("%H:%M") %></td>
               <%end%>
               <% if stamp.memo == nil %>
                 <td></td>
               <%else%>
                 <td><%=stamp.memo %></td>
               <%end%>
-              <td><%=link_to("削除","/stamp/#{stamp.id}/destroy",{method: :post})%></td>
             </tr>
           <%end%>
         </tbody>

@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="page-header">
+        <h1>打刻編集</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <p><%=@stamp.date.strftime("%y年%m月%d日")%>　<%=@stamp.name%>　さん</p>
+    </div>
+  </div>
+  <%=form_with url:"/stamp/#{@stamp.id}/update" ,method: :post do |form| %>
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="start">始業時刻</label>
+        <input  class="form-control" type="time" name="start" id="start" value="<%=@start%>">
+        <label for="am_finish">休憩開始時刻</label>
+        <input  class="form-control" type="time" name="am_finish" id="am_finish" value="<%=@am_finish%>">
+        <label for="search_date">業務再開時刻</label>
+        <input  class="form-control" type="time" name="pm_start" id="pm_start" value="<%=@pm_start%>">
+        <label for="finish">終業時刻</label>
+        <input  class="form-control" type="time" name="finish" id="finish" value="<%=@finish%>">
+      </div>
+      <button type="submit" class="btn btn-primary">更新</button>
+    </form>
+  <%end%>
+  <br>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <p><%= link_to "戻る", :back %></p>
+    </div>
+  </div>
+</div>

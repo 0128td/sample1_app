@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="page-header">
+        <h1>ユーザ情報一覧</h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <%=link_to("新規追加はこちら","/users/new") %>
+    </div>
+  </div>
+  <br>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>おなまえ</th>
+          <th>メールアドレス</th>
+          <th>管理者</th>
+          <th>ユーザ</th>
+          <th>登録日</th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user|%>
+          <tr>
+            <td><%=user.name%></td>
+            <td><%=user.email%></td>
+            <% if user.admin == 1 %>
+              <td>◯</td>
+            <%else%>
+              <td></td>
+            <%end%>
+            <% if user.admin == 0 %>
+              <td>◯</td>
+            <%else%>
+              <td></td>
+            <%end%>
+            <td><%=user.created_at.strftime('%Y年%m月%d日') %></td>
+            <td><%=link_to("編集","/users/#{user.confirmation_token}/edit") %></td>
+            <td><%=link_to("削除","/users/#{user.confirmation_token}/destroy", method: :post, data: {confirm: '本当に削除しますか？' }) %></td>
+          </tr>
+        <%end%>
+        <tr>
+          <td colspan="2">合計(人)</td>
+          <td><%=User.where(admin:"1").count %></td>
+          <td><%=User.where(admin:"0").count %></td>
+          <td colspan="3"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

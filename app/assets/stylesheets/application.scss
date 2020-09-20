@@ -29,3 +29,25 @@ header {
 .index {
     top: 100px;
 }
+
+.flash_notice {
+    color: white;
+    background: rgba(77, 88, 250, 0.8);
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    z-index: 10;
+    width: 100%;
+    font-size: 20px;
+}
+
+.flash_alert {
+    color: white;
+    background: rgba(251, 170, 88, 0.8);
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    z-index: 10;
+    width: 100%;
+    font-size: 20px;
+}

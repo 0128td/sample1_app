@@ -1,5 +1,5 @@
 class StampsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: :top
   require "date"
   require "csv"
 
@@ -13,7 +13,7 @@ class StampsController < ApplicationController
     @year = @datetime.strftime("%Y")
     @date = @year + "-" + @month
     @stamps = Stamp.where(name: current_user.name).where("date like ?", "%#{@date}%").order(date: :desc)
-    @stamp = Stamp.find_by(date: @yymmdd)
+    @stamp = Stamp.find_by(name: current_user.name, date: @yymmdd)
   end
 
   def my_search
@@ -86,10 +86,10 @@ class StampsController < ApplicationController
     if @stamp.start == nil
       @stamp.update(start: @time)
       flash[:notice] = I18n.t("helpers.submit.create")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     else
       flash[:notice] = I18n.t("errors.messages.taken")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     end
   end
 
@@ -100,14 +100,14 @@ class StampsController < ApplicationController
 
     if @stamp.start == nil
       flash[:notice] = I18n.t("errors.messages.no_start")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     elsif @stamp.am_finish == nil
       @stamp.update(am_finish: @time)
       flash[:notice] = I18n.t("helpers.submit.create")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     else @stamp.am_finish != nil
       flash[:notice] = I18n.t("errors.messages.taken")
-      redirect_to("/")     end
+      redirect_to("/stamp/index")     end
   end
 
   def create_pm_start
@@ -117,14 +117,14 @@ class StampsController < ApplicationController
 
     if @stamp.start == nil
       flash[:notice] = I18n.t("errors.messages.no_start")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     elsif @stamp.pm_start == nil
       @stamp.update(pm_start: @time)
       flash[:notice] = I18n.t("helpers.submit.create")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     else @stamp.pm_start != nil
       flash[:notice] = I18n.t("errors.messages.taken")
-      redirect_to("/")     end
+      redirect_to("/stamp/index")     end
   end
 
   def create_finish
@@ -134,14 +134,14 @@ class StampsController < ApplicationController
 
     if @stamp.start == nil
       flash[:notice] = I18n.t("errors.messages.no_start")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     elsif @stamp.finish == nil
       @stamp.update(finish: @time)
       flash[:notice] = I18n.t("helpers.submit.create")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     else @stamp.finish != nil
       flash[:notice] = I18n.t("errors.messages.taken")
-      redirect_to("/")     end
+      redirect_to("/stamp/index")     end
   end
 
   def create_memo
@@ -151,7 +151,7 @@ class StampsController < ApplicationController
     if params[:memo]
       @stamp.update(memo: params[:memo])
       flash[:notice] = I18n.t("helpers.submit.create")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     else
       flash.now[:notice] = I18n.t("errors.messages.no_entry")
       render("stamps/index")
@@ -163,11 +163,59 @@ class StampsController < ApplicationController
 
     if @stamp.destroy
       flash[:notice] = I18n.t("helpers.submit.destroy")
-      redirect_to("/")
+      redirect_to("/stamp/index")
     end
   end
 
   def edit
+    @stamp = Stamp.find_by(token: params[:id])
+    @start = @stamp.start&.strftime("%H:%M")
+    @am_finish = @stamp.am_finish&.strftime("%H:%M")
+    @pm_start = @stamp.pm_start&.strftime("%H:%M")
+    @finish = @stamp.finish&.strftime("%H:%M")
+  end
+
+  def update
+    @stamp = Stamp.find_by(id: params[:id])
+    @year = @stamp.date.strftime("%Y")
+    @month = @stamp.date.strftime("%m")
+    @day = @stamp.date.strftime("%d")
+
+    if params[:start] != ""
+      @start = Time.parse(params[:start])
+      @starth = @start.hour
+      @startm = @start.min
+      @u_start = Time.local(@year, @month, @day, @starth, @startm)
+    end
+    if params[:am_finish] != ""
+      @am_finish = Time.parse(params[:am_finish])
+      @am_finishh = @am_finish.hour
+      @am_finishm = @am_finish.min
+      @u_am_finish = Time.local(@year, @month, @day, @am_finishh, @am_finishm)
+    end
+
+    if params[:pm_start] != ""
+      @pm_start = Time.parse(params[:pm_start])
+      @pm_starth = @pm_start.hour
+      @pm_startm = @pm_start.min
+      @u_pm_start = Time.local(@year, @month, @day, @pm_starth, @pm_startm)
+    end
+
+    if params[:finish] != ""
+      @finish = Time.parse(params[:finish])
+      @finishh = @finish.hour
+      @finishm = @finish.min
+      @u_finish = Time.local(@year, @month, @day, @finishh, @finishm)
+    end
+
+    @stamp.update(
+      start: @u_start,
+      am_finish: @u_am_finish,
+      pm_start: @u_pm_start,
+      finish: @u_finish,
+    )
+    flash[:notice] = I18n.t("helpers.submit.update")
+    redirect_to("/stamp/aggregate")
   end
 
   def start

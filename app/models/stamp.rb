@@ -2,7 +2,10 @@ class Stamp < ApplicationRecord
   validates :name, presence: true
   validates :date, presence: true
 
+  before_create :generate_token
+
   require "date"
+  require "securerandom"
 
   def Stamp.search(date, name, date_from, date_to)
     if date
@@ -18,5 +21,11 @@ class Stamp < ApplicationRecord
     else
       Stamp.none
     end
+  end
+
+  private
+
+  def generate_token
+    self.token = SecureRandom.urlsafe_base64
   end
 end

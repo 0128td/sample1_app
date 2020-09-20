@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <div class="page-header">
+        <h1>日次集計結果</h1>
+      </div>
+    </div>
+  </div>
+  <%=form_with url:"/stamp/day_search" ,method: :get, local: true do |form| %>
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="search_date">日付</label>
+        <input class="form-control" type="date" name="date" id="search_date"  value="<%=@date%>">
+      </div>
+      <button type="submit" class="btn btn-primary">検索</button>
+    </form>
+  <%end%>
+  <br>
+  <br>
+  <%=form_with url:"/stamp/name_search" ,method: :get, local: true do |form| %>
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="search_name">おなまえ（必須）</label>
+        <input class="form-control" type="text" name="name" id="search_name">
+      </div>
+      <div class="form-group">
+        <label for="search_from">検索開始日</label>
+        <input class="form-control" type="date" name="date_from" id="search_from">
+      </div>
+      <div class="form-group">
+        <label for="search_to">検索終了日</label>
+        <input class="form-control" type="date" name="date_to" id="search_to">
+      </div>
+      <button type="submit" class="btn btn-primary">検索</button>
+      <button type="button" class="btn btn-success" id="reset">リセット</button>
+    </form>
+  </form>
+<%end%>
+<br>
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>名前</th>
+        <th>　始業時刻　</th>
+        <th>休憩開始時刻</th>
+        <th>業務再開時刻</th>
+        <th>　終業時刻　</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @stamps.each do |stamp|%>
+        <tr>
+          <td><%=link_to(stamp.name,"/stamp/#{stamp.token}/edit")%></td>
+          <% if stamp.start == nil %>
+            <td>未</td>
+          <%else%>
+            <td><%=stamp.start.strftime("%H:%M")%></td>
+          <%end%>
+          <% if stamp.am_finish == nil %>
+            <td>未</td>
+          <%else%>
+            <td><%=stamp.start.strftime("%H:%M")%></td>
+          <%end%>
+          <% if stamp.pm_start == nil %>
+            <td>未</td>
+          <%else%>
+            <td><%=stamp.pm_start.strftime("%H:%M")%></td>
+          <%end%>
+          <% if stamp.finish == nil %>
+            <td>未</td>
+          <%else%>
+            <td><%=stamp.finish.strftime("%H:%M")%></td>
+          <%end%>
+        </tr>
+      <%end%>
+      <tr style="font-weight: bold; font-size:16px;">
+        <td>合計：<%=@stamps.count %>人</td>
+        <td>合計：<%=@stamps.where.not(start:nil).count %>　人</td>
+        <td>合計：<%=@stamps.where.not(am_finish:nil).count %>　人</td>
+        <td>合計：<%=@stamps.where.not(pm_start:nil).count %>　人</td>
+        <td>合計：<%=@stamps.where.not(finish:nil).count %>　人</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
