@@ -42,6 +42,7 @@
     <thead>
       <tr>
         <th>　年月日　</th>
+        <th>　名前　　</th>
         <th>　始業時刻　</th>
         <th>休憩開始時刻</th>
         <th>業務再開時刻</th>
@@ -51,8 +52,9 @@
     <tbody>
       <% @stamps.each do |stamp|%>
         <tr>
+          <td><%=stamp.date.year%>年<%=stamp.date.month%>月<%=stamp.date.day%>日</td>
           <td><%=link_to("/stamp/#{stamp.token}/edit") do%>
-              <%=stamp.date.year%>年<%=stamp.date.month%>月<%=stamp.date.day%>日
+              <%=stamp.name%>
             <%end%>
           </td>
           <% if stamp.start == nil %>

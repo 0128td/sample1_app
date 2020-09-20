@@ -8,7 +8,7 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
-    <nav class="navbar navbar-inverse navbar-static-top">
+    <nav class="navbar navbar-default navbar-static-top">
       <% if flash[:notice] %>
         <div class="flash_notice">
           <%= flash[:notice] %>
@@ -36,12 +36,12 @@
                 <li><%=link_to("打刻集計","/stamp/aggregate")%></li>
                 <li><%=link_to("ユーザ編集","/users/index")%></li>
               </ul>
-              <p class="navbar-text">管理者：<%=link_to(current_user.name,"/users/edit")%>　さん</p>
+              <p class="navbar-text navbar-right">管理者：<%=link_to(current_user.name,"/users/edit")%>　さん</p>
             <%else%>
               <ul class="nav navbar-nav">
                 <li><%=link_to("ログアウト","/users/sign_out",{method: :delete})%></li>
               </ul>
-              <p class="navbar-text"><%=link_to(current_user.name,"/users/edit")%>　さん</p>
+              <p class="navbar-text navbar-right"><%=link_to(current_user.name,"/users/edit")%>　さん</p>
             <%end%>
           <%else%>
             <ul class="nav navbar-nav">

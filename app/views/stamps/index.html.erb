@@ -1,6 +1,6 @@
 <div class="container index">
   <div class="row">
-    <div class="col-xs-6">
+    <div class="col-xs-12 col-sm-6">
       <div class="page-header">
         <h3>本日の打刻をしてください</h3>
         <p>現在の日時：<%=@datetime.year %>年<%=@datetime.month %>月<%=@datetime.day %>日<%=@datetime.hour %>時<%=@datetime.min %>分</p>
@@ -8,22 +8,22 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12 col-sm-3">
+    <div class="form-group col-xs-8 col-sm-3">
       <%= form_with url:"/stamp/create_start" do |form| %>
         <button type="submit" class="btn btn-primary btn-block">始業</button>
       <%end%>
     </div>
-    <div class="col-xs-12 col-sm-3">
+    <div class="form-group col-xs-8 col-sm-3">
       <%= form_with url:"/stamp/create_am_finish" do |form| %>
         <button type="submit" class="btn btn-primary btn-block">昼休憩</button>
       <%end%>
     </div>
-    <div class="col-xs-12 col-sm-3">
+    <div class="form-group col-xs-8 col-sm-3">
       <%= form_with url:"/stamp/create_pm_start" do |form| %>
         <button type="submit" class="btn btn-primary btn-block">休憩後再開</button>
       <%end%>
     </div>
-    <div class="col-xs-12 col-sm-3">
+    <div class="form-group col-xs-8 col-sm-3">
       <%= form_with url:"/stamp/create_finish" do |form| %>
         <button type="submit" class="btn btn-primary btn-block">終業</button>
       <%end%>

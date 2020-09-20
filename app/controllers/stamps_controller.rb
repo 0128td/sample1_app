@@ -99,14 +99,14 @@ class StampsController < ApplicationController
     @time = Time.now.to_s
 
     if @stamp.start == nil
-      flash[:notice] = I18n.t("errors.messages.no_start")
+      flash[:alert] = I18n.t("errors.messages.no_start")
       redirect_to("/stamp/index")
     elsif @stamp.am_finish == nil
       @stamp.update(am_finish: @time)
       flash[:notice] = I18n.t("helpers.submit.create")
       redirect_to("/stamp/index")
     else @stamp.am_finish != nil
-      flash[:notice] = I18n.t("errors.messages.taken")
+      flash[:alert] = I18n.t("errors.messages.taken")
       redirect_to("/stamp/index")     end
   end
 
@@ -116,14 +116,14 @@ class StampsController < ApplicationController
     @time = Time.now.to_s
 
     if @stamp.start == nil
-      flash[:notice] = I18n.t("errors.messages.no_start")
+      flash[:alert] = I18n.t("errors.messages.no_start")
       redirect_to("/stamp/index")
     elsif @stamp.pm_start == nil
       @stamp.update(pm_start: @time)
       flash[:notice] = I18n.t("helpers.submit.create")
       redirect_to("/stamp/index")
     else @stamp.pm_start != nil
-      flash[:notice] = I18n.t("errors.messages.taken")
+      flash[:alert] = I18n.t("errors.messages.taken")
       redirect_to("/stamp/index")     end
   end
 
@@ -133,14 +133,14 @@ class StampsController < ApplicationController
     @time = Time.now.to_s
 
     if @stamp.start == nil
-      flash[:notice] = I18n.t("errors.messages.no_start")
+      flash[:alert] = I18n.t("errors.messages.no_start")
       redirect_to("/stamp/index")
     elsif @stamp.finish == nil
       @stamp.update(finish: @time)
       flash[:notice] = I18n.t("helpers.submit.create")
       redirect_to("/stamp/index")
     else @stamp.finish != nil
-      flash[:notice] = I18n.t("errors.messages.taken")
+      flash[:alert] = I18n.t("errors.messages.taken")
       redirect_to("/stamp/index")     end
   end
 
@@ -153,17 +153,8 @@ class StampsController < ApplicationController
       flash[:notice] = I18n.t("helpers.submit.create")
       redirect_to("/stamp/index")
     else
-      flash.now[:notice] = I18n.t("errors.messages.no_entry")
+      flash[:alert] = I18n.t("errors.messages.no_entry")
       render("stamps/index")
-    end
-  end
-
-  def destroy
-    @stamp = Stamp.find_by(id: params[:id])
-
-    if @stamp.destroy
-      flash[:notice] = I18n.t("helpers.submit.destroy")
-      redirect_to("/stamp/index")
     end
   end
 
@@ -216,149 +207,5 @@ class StampsController < ApplicationController
     )
     flash[:notice] = I18n.t("helpers.submit.update")
     redirect_to("/stamp/aggregate")
-  end
-
-  def start
-    @stamp = Stamp.find_by(id: params[:id])
-    @start = @stamp.start&.strftime("%H:%M")
-  end
-
-  def update_start
-    @stamp = Stamp.find_by(id: params[:id])
-    @year = @stamp.date.strftime("%Y")
-    @month = @stamp.date.strftime("%m")
-    @day = @stamp.date.strftime("%d")
-
-    if params[:start] != ""
-      @start = Time.parse(params[:start])
-      @starth = @start.hour
-      @startm = @start.min
-      @p_start = Time.local(@year, @month, @day, @starth, @startm)
-    end
-
-    if @p_start&.past?
-      @stamp.update(
-        start: @p_start,
-      )
-      flash[:notice] = I18n.t("helpers.submit.update")
-      redirect_to("/")
-    elsif params[:start] == ""
-      @stamp.update(
-        start: nil,
-      )
-      flash[:notice] = I18n.t("helpers.submit.update")
-      redirect_to("/")
-    else
-      flash[:notice] = I18n.t("errors.messages.future_time")
-      render("stamps/start")
-    end
-  end
-
-  def am_finish
-    @stamp = Stamp.find_by(id: params[:id])
-    @am_finish = @stamp.am_finish&.strftime("%H:%M")
-  end
-
-  def update_am_finish
-    @stamp = Stamp.find_by(id: params[:id])
-    @year = @stamp.date.strftime("%Y")
-    @month = @stamp.date.strftime("%m")
-    @day = @stamp.date.strftime("%d")
-
-    if params[:am_finish] != ""
-      @am_finish = Time.parse(params[:am_finish])
-      @am_finishh = @am_finish.hour
-      @am_finishm = @am_finish.min
-      @p_am_finish = Time.local(@year, @month, @day, @am_finishh, @am_finishm)
-    end
-
-    if @p_am_finish&.past?
-      @stamp.update(
-        am_finish: @p_am_finish,
-      )
-      flash[:notice] = I18n.t("helpers.submit.update")
-      redirect_to("/index")
-    elsif params[:am_finish] == ""
-      @stamp.update(
-        am_finish: nil,
-      )
-      flash[:notice] = I18n.t("helpers.submit.update")
-      redirect_to("/index")
-    else
-      flash[:notice] = I18n.t("errors.messages.future_time")
-      render("stamps/am_finish")
-    end
-  end
-
-  def pm_start
-    @stamp = Stamp.find_by(id: params[:id])
-    @pm_start = @stamp.pm_start&.strftime("%H:%M")
-  end
-
-  def update_pm_start
-    @stamp = Stamp.find_by(id: params[:id])
-    @year = @stamp.date.strftime("%Y")
-    @month = @stamp.date.strftime("%m")
-    @day = @stamp.date.strftime("%d")
-
-    if params[:pm_start] != ""
-      @pm_start = Time.parse(params[:pm_start])
-      @pm_starth = @pm_start.hour
-      @pm_startm = @pm_start.min
-      @p_pm_start = Time.local(@year, @month, @day, @pm_starth, @pm_startm)
-    end
-
-    if @p_pm_start&.past?
-      @stamp.update(
-        pm_start: @p_pm_start,
-      )
-      flash[:notice] = I18n.t("helpers.submit.update")
-      redirect_to("/index")
-    elsif params[:pm_start] == ""
-      @stamp.update(
-        pm_start: nil,
-      )
-      flash[:notice] = I18n.t("helpers.submit.update")
-      redirect_to("/index")
-    else
-      flash[:notice] = I18n.t("errors.messages.future_time")
-      render("stamps/pm_start")
-    end
-  end
-
-  def finish
-    @stamp = Stamp.find_by(id: params[:id])
-    @finish = @stamp.finish&.strftime("%H:%M")
-  end
-
-  def update_finish
-    @stamp = Stamp.find_by(id: params[:id])
-    @year = @stamp.date.strftime("%Y")
-    @month = @stamp.date.strftime("%m")
-    @day = @stamp.date.strftime("%d")
-
-    if params[:finish] != ""
-      @finish = Time.parse(params[:finish])
-      @finishh = @finish.hour
-      @finishm = @finish.min
-      @p_finish = Time.local(@year, @month, @day, @finishh, @finishm)
-    end
-
-    if @p_finish&.past?
-      @stamp.update(
-        finish: @p_finish,
-      )
-      flash[:notice] = I18n.t("helpers.submit.update")
-      redirect_to("/index")
-    elsif params[:finish] == ""
-      @stamp.update(
-        finish: nil,
-      )
-      flash[:notice] = I18n.t("helpers.submit.update")
-      redirect_to("/index")
-    else
-      flash[:notice] = I18n.t("errors.messages.future_time")
-      render("stamps/finish")
-    end
   end
 end
